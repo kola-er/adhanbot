@@ -1,0 +1,24 @@
+"""
+Methods identifying various schools of thought about how to compute the timings
+0 - Shia Ithna-Ashari
+1 - University of Islamic Sciences, Karachi
+2 - Islamic Society of North America (ISNA)
+3 - Muslim World League (MWL)
+4 - Umm al-Qura, Makkah
+5 - Egyptian General Authority of Survey
+7 - Institute of Geophysics, University of Tehran
+"""
+METHOD = 3
+
+# Coordinates and Timezone
+LATITUDE = 6.4531
+LONGITUDE = 3.3958
+TIMEZONE = 'Africa/Lagos'
+
+# Slack webhook url
+SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/***************'
+SLACK_CHANNEL = 'testing_channel'
+
+# Email support
+TO_EMAIL = 'example@example.com'
+FROM_EMAIL = 'example@example.com'
