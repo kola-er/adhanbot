@@ -52,7 +52,12 @@ def get_adhan_api_endpoint():
     )
 
 def get_time_diff_between_now_and_salah(salah, adhan_timings):
-    current_time = pytz.timezone(settings.TIMEZONE).localize(datetime.now())
+    try:
+        current_time = datetime.now(pytz.timezone(settings.TIMEZONE))
+    except pytz.exceptions.UnknownTimeZoneError:
+        print('UnknownTimeZoneError')
+        sys.exit(1)
+
     current_datetime = datetime.strptime('%d:%d' % (current_time.hour, current_time.minute), '%H:%M')
     salah_datetime = datetime.strptime(adhan_timings[salah], '%H:%M')
 
