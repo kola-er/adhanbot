@@ -22,3 +22,25 @@ SLACK_CHANNEL = 'testing_channel'
 # Email support
 TO_EMAIL = 'example@example.com'
 FROM_EMAIL = 'example@example.com'
+
+"""
+Limit number of salah to get notification for.
+
+Example: SALAWAT = ['Dhuhr', 'Asr', 'Maghrib']
+"""
+# SALAWAT = ['Dhuhr', 'Asr']
+
+"""
+Days of the week to be exempted for notifications.
+
+0 - Monday
+1 - Tuesday
+2 - Wednesday
+3 - Thursday
+4 - Friday
+5 - Saturday
+6 - Sunday
+
+Example: DAYS_OF_THE_WEEK_EXEMPTED = [0, 1, 2]
+"""
+# DAYS_OF_THE_WEEK_EXEMPTED = [5, 6]

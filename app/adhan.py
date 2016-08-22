@@ -51,12 +51,21 @@ def get_adhan_api_endpoint():
         settings.METHOD
     )
 
-def get_time_diff_between_now_and_salah(salah, adhan_timings):
+def get_current_time():
     try:
-        current_time = datetime.now(pytz.timezone(settings.TIMEZONE))
+        return datetime.now(pytz.timezone(settings.TIMEZONE))
     except pytz.exceptions.UnknownTimeZoneError:
         print('UnknownTimeZoneError')
         sys.exit(1)
+
+def sleep_on_exempted_days():
+    current_time = get_current_time()
+    if current_time.weekday in settings.DAYS_OF_THE_WEEK_EXEMPTED:
+        time.sleep((24 - current_time.hour) * 3600)
+        return sleep_on_exempted_days()
+
+def get_time_diff_between_now_and_salah(salah, adhan_timings):
+    current_time = get_current_time()
 
     current_datetime = datetime.strptime('%d:%d' % (current_time.hour, current_time.minute), '%H:%M')
     salah_datetime = datetime.strptime(adhan_timings[salah], '%H:%M')
@@ -74,6 +83,7 @@ def display_help_message():
 
 def main():
     while True:
+        sleep_on_exempted_days()
         aladhan_response = requests.get(get_adhan_api_endpoint())
         if aladhan_response.status_code != 200:
             mail.send_mail('AlAdhan API is down!')

@@ -10,6 +10,16 @@ DUA_BEFORE_NIGHT_SLEEP = 'Remember to recite ayat-ul-kurisiy, surat-ul-ihklas, s
 FAJR_DUA = 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ'
 FAJR_DUA_TRANSLATION = 'All praise be to Allah, who gave us life after killing us (sleep is a form of death) and to Him we will be raised and returned'
 NIGHT_SLEEP_IN_SECONDS = 32000
+WHOLE_DAY_SLEEP_IN_SECONDS = 86400
 PID_FILE = '/tmp/adhanbot'
 REMINDER_TEXT = '...حي على الصلاة...حي على الفلاح'
-SALAWAT = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
+
+try:
+    SALAWAT
+except NameError:
+    SALAWAT = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
+
+try:
+    DAYS_OF_THE_WEEK_EXEMPTED
+except NameError:
+    DAYS_OF_THE_WEEK_EXEMPTED = []
