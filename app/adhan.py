@@ -60,7 +60,7 @@ def get_current_time():
 
 def sleep_on_exempted_days():
     current_time = get_current_time()
-    if current_time.weekday in settings.DAYS_OF_THE_WEEK_EXEMPTED:
+    if current_time.weekday() in settings.DAYS_OF_THE_WEEK_EXEMPTED:
         time.sleep((24 - current_time.hour) * 3600)
         return sleep_on_exempted_days()
 
