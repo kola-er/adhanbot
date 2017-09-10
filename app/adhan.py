@@ -1,10 +1,14 @@
+import json
+import os
+import signal
+import sys
+import time
 from datetime import datetime
-import json, os, signal, sys, time
 
-from daemonize import Daemonize
-import pytz, requests
+import pytz
+import requests
 
-import mail, settings
+from . import mail, settings
 
 
 def form_slack_payload(salah, slack_channel):
@@ -72,15 +76,6 @@ def get_time_diff_between_now_and_salah(salah, adhan_timings):
 
     return (salah_datetime - current_datetime).total_seconds()
 
-def display_help_message():
-    return """
-    Usage: python -m adhanbot.app.adhan <command>
-
-    <command>
-    start: Run program
-    stop: Kill running instance of the program
-    """
-
 def main():
     while True:
         sleep_on_exempted_days()
@@ -102,15 +97,4 @@ def main():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        if sys.argv[1] == 'start':
-            daemon = Daemonize(app='adhanbot', pid=settings.PID_FILE, action=main)
-            daemon.start()
-        elif sys.argv[1] == 'stop':
-            if os.path.isfile(settings.PID_FILE):
-                with open(settings.PID_FILE, 'r') as f:
-                    os.kill(int(f.read()), signal.SIGTERM)
-        else:
-            print(display_help_message())
-    else:
-        print(display_help_message())
+    main()
