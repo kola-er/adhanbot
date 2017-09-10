@@ -32,7 +32,7 @@ Limit number of salah to get notification for.
 
 Example: SALAWAT = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
 """
-SALAWAT = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
+SALAWAT = ['Dhuhr', 'Asr']
 
 """
 Days of the week to be exempted for notifications.
@@ -47,7 +47,16 @@ Days of the week to be exempted for notifications.
 
 Example: DAYS_OF_THE_WEEK_EXEMPTED = [5, 6]
 """
-DAYS_OF_THE_WEEK_EXEMPTED = []
+DAYS_OF_THE_WEEK_EXEMPTED = [5, 6]
+
+# Default Adhan Timings
+DEFAULT_ADHAN_TIMINGS = {
+	'Fajr': '05:30',
+	'Dhuhr': '13:15',
+	'Asr': '16:15',
+	'Maghrib': '19:05',
+	'Isha': '20:20',
+}
 
 # Adhan data source
 ADHAN_API_BASE_URL = 'http://api.aladhan.com/timings'
