@@ -1,6 +1,6 @@
 import sendgrid
 
-from . import settings
+import settings
 
 def send_mail(message):
     sg = sendgrid.SendGridAPIClient(apikey=settings.SENDGRID_API_KEY)
