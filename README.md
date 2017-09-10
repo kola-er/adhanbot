@@ -4,11 +4,11 @@ Slack WebHook for Islamic Call to Prayer
 ## Setup
 ```bash
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
-Rename config.py.example to config.py, and set the variables as required.
+Set necessary variables in the .env file
 
 ```bash
-cd .. # one level outside of this base directory
-python -m adhanbot.app.adhan
+python -m app.adhan
 ```
