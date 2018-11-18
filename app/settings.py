@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import dotenv
 
 dotenv.load()
@@ -16,23 +18,23 @@ METHOD = 3
 
 LATITUDE = 6.4531
 LONGITUDE = 3.3958
-TIMEZONE = 'Africa/Lagos'
+TIMEZONE = "Africa/Lagos"
 
-# Slack webhook url
-SLACK_WEBHOOK_URL= dotenv.get('SLACK_WEBHOOK_URL', '')
-SLACK_CHANNEL = dotenv.get('SLACK_CHANNEL', '')
+# Slack
+SLACK_WEBHOOK_URL = (dotenv.get("SLACK_WEBHOOK_URL") or "").strip()
+SLACK_CHANNELS = [i.strip() for i in (dotenv.get("SLACK_CHANNELS") or "").split(",")]
 
 # Email support
-SENDGRID_API_KEY = dotenv.get('SENDGRID_API_KEY', '')
-TO_EMAIL = dotenv.get('TO_EMAIL', '')
-FROM_EMAIL = 'support@adhanbot.com'
+SENDGRID_API_KEY = (dotenv.get("SENDGRID_API_KEY") or "").strip()
+TO_EMAIL = (dotenv.get("TO_EMAIL") or "").strip()
+FROM_EMAIL = "support@adhanbot.com"
 
 """
 Limit number of salah to get notification for.
 
 Example: SALAWAT = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
 """
-SALAWAT = ['Dhuhr', 'Asr']
+SALAWAT = ["Dhuhr", "Asr"]
 
 """
 Days of the week to be exempted for notifications.
@@ -51,20 +53,22 @@ DAYS_OF_THE_WEEK_EXEMPTED = [5, 6]
 
 # Default Adhan Timings
 DEFAULT_ADHAN_TIMINGS = {
-	'Fajr': '05:30',
-	'Dhuhr': '13:15',
-	'Asr': '16:15',
-	'Maghrib': '19:05',
-	'Isha': '20:20',
+    "Fajr": "05:30",
+    "Dhuhr": "13:15",
+    "Asr": "16:15",
+    "Maghrib": "19:05",
+    "Isha": "20:20",
 }
 
-# Adhan data source
-ADHAN_API_BASE_URL = 'http://api.aladhan.com/timings'
+# Adhan info source
+ADHAN_API_BASE_URL = "http://api.aladhan.com/timings"
 
 # Constants
-CONSTANT_REMINDER = 'The Success you search for calls you FIVE times a day!'
-DUA_BEFORE_NIGHT_SLEEP = 'Remember to recite ayat-ul-kurisiy, surat-ul-ihklas, surat-ul-falaq, surat-u-nas before going to bed. May Allah forgive us our sins, overlook our shortcomings and have mercy on us. Aameen'
-FAJR_DUA = 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ'
-FAJR_DUA_TRANSLATION = 'All praise be to Allah, who gave us life after killing us (sleep is a form of death) and to Him we will be raised and returned'
+CONSTANT_REMINDER = "The Success you search for calls you FIVE times a day!"
+DUA_BEFORE_NIGHT_SLEEP = "Remember to recite ayat-ul-kurisiy, surat-ul-ihklas, surat-ul-falaq, surat-u-nas before going to bed. May Allah forgive us our sins, overlook our shortcomings and have mercy on us. Aameen"
+FAJR_DUA = (
+    "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ"
+)
+FAJR_DUA_TRANSLATION = "All praise be to Allah, who gave us life after killing us (sleep is a form of death) and to Him we will be raised and returned"
 NIGHT_SLEEP_IN_SECONDS = 32000
-REMINDER_TEXT = '...حي على الصلاة...حي على الفلاح'
+REMINDER_TEXT = "...حي على الصلاة...حي على الفلاح"
