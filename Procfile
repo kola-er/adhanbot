@@ -1,1 +1,1 @@
-clock: python -m app.adhan
+clock: python start.py

@@ -10,5 +10,5 @@ cp .env.example .env
 Set necessary variables in the .env file
 
 ```bash
-python -m app.adhan
+python start.py
 ```
