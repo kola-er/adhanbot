@@ -4,16 +4,14 @@ import dotenv
 
 dotenv.load()
 
-"""
-Methods identifying various schools of thought about how to compute the timings
-0 - Shia Ithna-Ashari
-1 - University of Islamic Sciences, Karachi
-2 - Islamic Society of North America (ISNA)
-3 - Muslim World League (MWL)
-4 - Umm al-Qura, Makkah
-5 - Egyptian General Authority of Survey
-7 - Institute of Geophysics, University of Tehran
-"""
+# Methods identifying various schools of thought about how to compute the timings
+# 0 - Shia Ithna-Ashari
+# 1 - University of Islamic Sciences, Karachi
+# 2 - Islamic Society of North America (ISNA)
+# 3 - Muslim World League (MWL)
+# 4 - Umm al-Qura, Makkah
+# 5 - Egyptian General Authority of Survey
+# 7 - Institute of Geophysics, University of Tehran
 METHOD = 3
 
 LATITUDE = 6.4531
@@ -29,26 +27,19 @@ SENDGRID_API_KEY = (dotenv.get("SENDGRID_API_KEY") or "").strip()
 TO_EMAIL = (dotenv.get("TO_EMAIL") or "").strip()
 FROM_EMAIL = "support@adhanbot.com"
 
-"""
-Limit number of salah to get notification for.
-
-Example: SALAWAT = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
-"""
+# Limit number of salah to get notification for.
+# Example: SALAWAT = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']
 SALAWAT = ["Dhuhr", "Asr"]
 
-"""
-Days of the week to be exempted for notifications.
-
-0 - Monday
-1 - Tuesday
-2 - Wednesday
-3 - Thursday
-4 - Friday
-5 - Saturday
-6 - Sunday
-
-Example: DAYS_OF_THE_WEEK_EXEMPTED = [5, 6]
-"""
+# Days of the week to be exempted for notifications.
+# 0 - Monday
+# 1 - Tuesday
+# 2 - Wednesday
+# 3 - Thursday
+# 4 - Friday
+# 5 - Saturday
+# 6 - Sunday
+# Example: DAYS_OF_THE_WEEK_EXEMPTED = [5, 6]
 DAYS_OF_THE_WEEK_EXEMPTED = [5, 6]
 
 # Default Adhan Timings
