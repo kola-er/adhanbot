@@ -9,6 +9,12 @@ from . import settings
 
 
 class AlAdhanAPIWrapper(object):
+    """
+    Wrapper for the AlAdhan API
+
+    Add more methods for the API endpoints as necessary
+    """
+
     def __init__(self):
         self.api_url = "{}?latitude={}&longitude={}&timezonestring={}&method={}".format(
             settings.ADHAN_API_BASE_URL,
@@ -19,8 +25,7 @@ class AlAdhanAPIWrapper(object):
         )
         self.service = Service(service_classes=[SendGridAPIWrapper])
 
-    @property
-    def adhan_timings(self):
+    def get_adhan_timings(self):
         aladhan_response = requests.get(self.api_url)
         if aladhan_response.status_code != 200:
             self.service.sendgrid.notify_of_error(service="AlAdhan API")
@@ -29,6 +34,12 @@ class AlAdhanAPIWrapper(object):
 
 
 class AlQuranAPIWrapper(object):
+    """
+    Wrapper for the AlQuran API
+
+    Add more methods for the API endpoints as necessary
+    """
+
     def __init__(self):
         self.api_url = (
             "http://api.alquran.cloud/ayah/{}/editions/quran-uthmani,en.sahih"
@@ -46,6 +57,12 @@ class AlQuranAPIWrapper(object):
 
 
 class SendGridAPIWrapper(object):
+    """
+    Wrapper for the SendGrid API
+
+    Add more methods for the API endpoints as necessary
+    """
+
     def __init__(self):
         self.api_key = settings.SENDGRID_API_KEY
         self.to_email = settings.TO_EMAIL
@@ -67,6 +84,11 @@ class SendGridAPIWrapper(object):
         return sg.client.mail.send.post(request_body=data)
 
     def notify_of_error(self, service=None, error_message=None):
+        """
+        Note that this method is special and does not translate in any sense
+        to any of SendGrid existing API endpoints
+        """
+
         message = "Something doesn't seem to be right!"
         if service:
             message = "{} seems to be down!".format(service)
@@ -77,14 +99,18 @@ class SendGridAPIWrapper(object):
         self.send_mail(message)
 
 
-class SlackAPIWrapper(object):
+class SlackWebhookAPIWrapper(object):
+    """
+    Wrapper for the Slack Incoming Webhook API
+    """
+
     def __init__(self):
         self.webhook_url = settings.SLACK_WEBHOOK_URL
         self.service = Service(service_classes=[AlQuranAPIWrapper, SendGridAPIWrapper])
 
-    def compose_attachment_fields(self, salah):
+    def compose_attachment_fields(self, prayer):
         fields = []
-        if salah == "Fajr":
+        if prayer == "Fajr":
             fields = [
                 {
                     "title": "Dua upon waking up in the morning",
@@ -92,7 +118,7 @@ class SlackAPIWrapper(object):
                 },
                 {"value": settings.FAJR_DUA_TRANSLATION},
             ]
-        elif salah == "Isha":
+        elif prayer == "Isha":
             fields = [
                 {
                     "title": "Dua before going to bed at night",
@@ -123,7 +149,7 @@ class SlackAPIWrapper(object):
 
     def compose_payload(self, data):
         channel = data.get("channel")
-        salah = data.get("salah") or ""
+        prayer = data.get("prayer") or ""
 
         if not channel:
             raise Exception(
@@ -137,9 +163,9 @@ class SlackAPIWrapper(object):
                     {
                         "color": "#36a64f",
                         "pretext": "{}".format(settings.REMINDER_TEXT),
-                        "title": salah,
+                        "title": prayer,
                         "text": settings.CONSTANT_REMINDER,
-                        "fields": self.compose_attachment_fields(salah),
+                        "fields": self.compose_attachment_fields(prayer),
                     }
                 ],
             }
@@ -155,17 +181,23 @@ class SlackAPIWrapper(object):
 
 
 class Service(object):
+    """
+    Third-party API service accessible on-demand
+
+    Its initialization defaults to a registry of services currently available
+    """
+
     def __init__(self, service_classes=None):
         service_classes = service_classes or [
-            SlackAPIWrapper,
+            SlackWebhookAPIWrapper,
             AlAdhanAPIWrapper,
             AlQuranAPIWrapper,
             SendGridAPIWrapper,
         ]
 
         for service_class in service_classes:
-            if service_class == SlackAPIWrapper:
-                self.slack = SlackAPIWrapper()
+            if service_class == SlackWebhookAPIWrapper:
+                self.slack = SlackWebhookAPIWrapper()
             elif service_class == AlAdhanAPIWrapper:
                 self.aladhan = AlAdhanAPIWrapper()
             elif service_class == AlQuranAPIWrapper:
