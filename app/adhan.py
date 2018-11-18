@@ -1,66 +1,79 @@
 import sys
 import time
-from datetime import datetime
-
-import pytz
 
 from . import settings
 from .service import Service
+from . import utils
 
 
 class AdhanBot(object):
+    """
+    Bot model that reminds subscribed Muslims of the five daily islamic prayers
+    at the exact time of each based on some settings like location e.t.c.
+
+    method `run` kicks off the notification
+    """
+
     def __init__(self, subscribers=None):
         self.subscribers = subscribers or []
+        self.adhan_timings = None
         self.service = Service()
 
-    @property
-    def current_time(self):
-        try:
-            return datetime.now(pytz.timezone(settings.TIMEZONE))
-        except pytz.exceptions.UnknownTimeZoneError:
-            print("UnknownTimeZoneError")
-            sys.exit(1)
+    def notify_subscribers(self, prayer):
+        day_identifier = (
+            "weekend" if utils.current_datetime().weekday() in [5, 6] else "weekday"
+        )
 
-    def sleep_for(self, seconds):
-        time.sleep(seconds)
-
-    def notify_subscribers(self, salah):
         for subscriber in self.subscribers:
-            data = {"channel": subscriber, "salah": salah}
-            self.service.slack.post(data)
+            subscriber_excluded_prayer = utils.clean_data(
+                (
+                    (settings.SUBSCRIBERS_PREFERENCES.get(subscriber) or {}).get(
+                        "exclude"
+                    )
+                    or {}
+                ).get(day_identifier)
+                or []
+            )
 
-    def get_time_diff_between_now_and_salah(self, salah, adhan_timings):
-        current_time = self.current_time
+            if prayer.lower() in subscriber_excluded_prayer:
+                continue
 
-        current_datetime = datetime.strptime(
-            "{}:{}".format(current_time.hour, current_time.minute), "%H:%M"
+            self.service.slack.post({"channel": subscriber, "prayer": prayer})
+
+    def get_time_diff_between_now_and_prayer(self, prayer):
+        current_datetime = utils.current_datetime()
+        current_datetime = utils.parse_hour_and_min_to_datetime(
+            current_datetime.hour, current_datetime.minute
         )
-        salah_datetime = datetime.strptime(adhan_timings[salah], "%H:%M")
-
-        return (salah_datetime - current_datetime).total_seconds()
-
-    def call_to_prayer(self, salah):
-        time_diff_in_seconds = self.get_time_diff_between_now_and_salah(
-            salah, self.service.aladhan.adhan_timings
+        prayer_datetime = utils.parse_hour_and_min_to_datetime(
+            *self.adhan_timings[prayer].split(":")
         )
 
+        return (prayer_datetime - current_datetime).total_seconds()
+
+    def call_to_prayer(self, prayer):
+        time_diff_in_seconds = self.get_time_diff_between_now_and_prayer(prayer)
         if time_diff_in_seconds >= 0:
-            self.sleep_for(time_diff_in_seconds)
-            self.notify_subscribers(salah)
-
-    def sleep_on_exempted_days(self):
-        current_time = self.current_time
-        if current_time.weekday() in settings.DAYS_OF_THE_WEEK_EXEMPTED:
-            self.sleep_for((24 - current_time.hour) * 3600)
-            return self.sleep_on_exempted_days()
+            time.sleep(time_diff_in_seconds)
+            self.notify_subscribers(prayer)
 
     def run(self):
+        """
+        Method that kicks off the notification process and ensures it's continuous
+        unless the timezone is unknown
+        """
+
         while True:
             try:
-                self.sleep_on_exempted_days()
-                for salah in settings.SALAWAT:
-                    self.call_to_prayer(salah)
+                self.adhan_timings = self.service.aladhan.get_adhan_timings()
+                for prayer in ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]:
+                    self.call_to_prayer(prayer)
 
-                self.sleep_for(settings.NIGHT_SLEEP_IN_SECONDS)
+                time.sleep(settings.NIGHT_SLEEP_IN_SECONDS)
+            except utils.pytz.exceptions.UnknownTimeZoneError as e:
+                self.service.sendgrid.notify_of_error(
+                    "UnknownTimeZoneError: {}".format(e)
+                )
+                sys.exit(1)
             except Exception as e:
                 self.service.sendgrid.notify_of_error(e)
