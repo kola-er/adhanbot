@@ -16,7 +16,6 @@ Slack bot for Islamic Call to Prayer
 ```bash
 $ pip install -r requirements.txt
 $ cp .env.example .env
-$ cp config.json.example config.json
 ```
 * Edit both .env and config.json accordingly. NOTE that `channelA` and `channelB` are used as example in both files and need to be changed to the Slack channels you would like to send notifications to.
 * Start the app with this command. NOTE that you need to have python3 installed.

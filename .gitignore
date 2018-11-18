@@ -7,9 +7,6 @@ __pycache__/
 # environment files
 .env
 
-# config files
-config.json
-
 .idea/
 venv/
 .DS_Store
