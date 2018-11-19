@@ -57,6 +57,11 @@ class AdhanBot(object):
             time.sleep(time_diff_in_seconds)
             self.notify_subscribers(prayer)
 
+    def sleep_at_night(self):
+        n = settings.NIGHT_SLEEP_IN_SECONDS + self.get_time_diff_between_now_and_prayer("Isha")
+        if n > 0:
+            time.sleep(n)
+
     def run(self):
         """
         Method that kicks off the notification process and ensures it's continuous
@@ -69,7 +74,7 @@ class AdhanBot(object):
                 for prayer in ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]:
                     self.call_to_prayer(prayer)
 
-                time.sleep(settings.NIGHT_SLEEP_IN_SECONDS)
+                self.sleep_at_night()
             except utils.pytz.exceptions.UnknownTimeZoneError as e:
                 self.service.sendgrid.notify_of_error(
                     "UnknownTimeZoneError: {}".format(e)
