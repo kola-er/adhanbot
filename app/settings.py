@@ -48,7 +48,7 @@ FAJR_DUA = (
     "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ"
 )
 FAJR_DUA_TRANSLATION = "All praise be to Allah, who gave us life after killing us (sleep is a form of death) and to Him we will be raised and returned"
-NIGHT_SLEEP_IN_SECONDS = 32000
+NIGHT_SLEEP_IN_SECONDS = 28800
 REMINDER_TEXT = "...حي على الصلاة...حي على الفلاح"
 
 # Automatically sets variables using the key-value pair of the `config.json` file in the project root directory
