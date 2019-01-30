@@ -1,29 +1,16 @@
 {
     "subscribers_preferences": {
-        "channelA": {
-            "broadcast_notifier": "<!channel>",
+        "reminder": {
+            "broadcast_notifier": "<!subteam^SAWBDLRDL|reminder-ng>",
             "exclude": {
                 "weekday": ["fajr", "maghrib", "isha"],
                 "weekend": ["fajr", "dhuhr", "asr", "maghrib", "isha"]
             }
         },
-        "channelB": {
-            "broadcast_notifier": "<!channel>",
+        "reminder-amity": {
             "exclude": {
                 "weekday": ["dhuhr", "asr"]
             }
         }
-    },
-    "default_adhan_timings": {
-        "fajr": "05:30",
-        "dhuhr": "13:15",
-        "asr": "16:15",
-        "maghrib": "19:05",
-        "isha": "20:20"
-    },
-    "method": 3,
-    "latitude": 6.4531,
-    "longitude": 3.3958,
-    "timezone": "Africa/Lagos",
-    "from_email": "support@adhanbot.com"
+    }
 }
