@@ -25,12 +25,10 @@ class AdhanBot(object):
         )
 
         for subscriber in self.subscribers:
+            subscriber_preferences = settings.SUBSCRIBERS_PREFERENCES.get(subscriber) or {}
             subscriber_excluded_prayer = utils.clean_data(
                 (
-                    (settings.SUBSCRIBERS_PREFERENCES.get(subscriber) or {}).get(
-                        "exclude"
-                    )
-                    or {}
+                    subscriber_preferences.get("exclude") or {}
                 ).get(day_identifier)
                 or []
             )
@@ -38,7 +36,11 @@ class AdhanBot(object):
             if prayer.lower() in subscriber_excluded_prayer:
                 continue
 
-            self.service.slack.post({"channel": subscriber, "prayer": prayer})
+            self.service.slack.post({
+                "channel": subscriber,
+                "prayer": prayer,
+                "notifier": subscriber_preferences.get("broadcast_notifier") or "<!channel>"
+            })
 
     def get_time_diff_between_now_and_prayer(self, prayer):
         current_datetime = utils.current_datetime()

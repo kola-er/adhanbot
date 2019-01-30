@@ -162,7 +162,7 @@ class SlackWebhookAPIWrapper(object):
                 "attachments": [
                     {
                         "color": "#36a64f",
-                        "pretext": "{} <!channel>".format(settings.REMINDER_TEXT),
+                        "pretext": "{} {}".format(settings.REMINDER_TEXT, data.get("notifier")),
                         "title": prayer,
                         "text": settings.CONSTANT_REMINDER,
                         "fields": self.compose_attachment_fields(prayer),

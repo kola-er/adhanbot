@@ -1,12 +1,14 @@
 {
     "subscribers_preferences": {
         "channelA": {
+            "broadcast_notifier": "<!channel>",
             "exclude": {
                 "weekday": ["fajr", "maghrib", "isha"],
                 "weekend": ["fajr", "dhuhr", "asr", "maghrib", "isha"]
             }
         },
         "channelB": {
+            "broadcast_notifier": "<!channel>",
             "exclude": {
                 "weekday": ["dhuhr", "asr"]
             }
